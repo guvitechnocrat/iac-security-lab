@@ -19,9 +19,9 @@ jobs:
           curl -sSL https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
           curl -sL https://github.com/zricethezav/gitleaks/releases/latest/download/gitleaks-linux-amd64 -o /usr/local/bin/gitleaks && chmod +x /usr/local/bin/gitleaks
 
-      - name: Run tfsec
+      - name: Detect secrets (gitleaks)
         run: |
-          tfsec terraform/
+          gitleaks detect --source=. --report-format=json --report-path=gitleaks-report.json
 
       - name: Run checkov for Terraform
         run: |
@@ -31,6 +31,9 @@ jobs:
         run: |
           checkov -d cloudformation/
 
-      - name: Detect secrets (gitleaks)
+
+      - name: Run tfsec
         run: |
-          gitleaks detect --source=. --report-format=json --report-path=gitleaks-report.json
+          tfsec terraform/
+
+
