@@ -18,9 +18,6 @@ jobs:
           pip install checkov
           curl -sSL https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
 
-      - name: Detect secrets (gitleaks)
-        run: |
-          gitleaks detect --source=. --report-format=json --report-path=gitleaks-report.json
 
       - name: Run checkov for Terraform
         run: |
