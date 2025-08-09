@@ -1,0 +1,36 @@
+name: IaC Security
+
+on: [push, pull_request]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Python (for checkov)
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install tools
+        run: |
+          pip install checkov
+          curl -sSL https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+          curl -sL https://github.com/zricethezav/gitleaks/releases/latest/download/gitleaks-linux-amd64 -o /usr/local/bin/gitleaks && chmod +x /usr/local/bin/gitleaks
+
+      - name: Run tfsec
+        run: |
+          tfsec terraform/
+
+      - name: Run checkov for Terraform
+        run: |
+          checkov -d terraform/
+
+      - name: Run checkov for CloudFormation
+        run: |
+          checkov -d cloudformation/
+
+      - name: Detect secrets (gitleaks)
+        run: |
+          gitleaks detect --source=. --report-format=json --report-path=gitleaks-report.json
