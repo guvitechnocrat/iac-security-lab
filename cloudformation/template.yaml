@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Vulnerable CloudFormation
+
+Resources:
+  InsecureS3:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead    # <-- insecure
+
+  InsecureSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Open SG"
+      SecurityGroupIngress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0        # <-- insecure
