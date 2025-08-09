@@ -17,7 +17,6 @@ jobs:
         run: |
           pip install checkov
           curl -sSL https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
-          curl -sL https://github.com/gitleaks/gitleaks/releases/download/v8.28.0/gitleaks_8.28.0_linux_x64.tar.gz -o /usr/local/bin/gitleaks.tar.gz && tar -ztvf gitleaks.tar.gz && chmod +x /usr/local/bin/gitleaks
 
       - name: Detect secrets (gitleaks)
         run: |
